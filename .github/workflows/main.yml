@@ -1,0 +1,23 @@
+name: main
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "conformance/**"
+  pull_request:
+    branches:
+      - main
+    paths_ignore:
+      - "conformance/**"
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: cargo test
+        run: cargo test
