@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  test:
-    name: test
+  conformance-test:
+    name: conformance tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
