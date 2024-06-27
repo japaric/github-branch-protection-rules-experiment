@@ -17,7 +17,7 @@ jobs:
         with:
           fetch-depth: 0
       - run: |
-          git diff --name-only origin/${{github.base_ref}} HEAD | grep -v '^conformance/' && echo outcome=1 || echo outcome=0
+          git diff --name-only origin/${{github.base_ref}} HEAD | grep -v '^conformance/' && echo "outcome=1" >> "$GITHUB_OUTPUT" || echo "outcome=0" >> "$GITHUB_OUTPUT"
 
   main-test:
     name: unit and integration tests
