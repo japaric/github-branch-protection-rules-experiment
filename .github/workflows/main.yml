@@ -9,7 +9,7 @@ on:
   pull_request:
     branches:
       - main
-    paths_ignore:
+    paths-ignore:
       - "conformance/**"
 
 jobs:
