@@ -28,8 +28,11 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         # runs conditionally
       - name: cargo test
-        if: ${{needs.hickory_changed.outputs.outcome}} == 1
+        if: needs.hickory_changed.outputs.outcome == '1'
         run: cargo test
+      - name: sanity check
+        if: needs.hickory_changed.outputs.outcome == '0'
+        run: true
 
   # always runs
   conformance-test:
