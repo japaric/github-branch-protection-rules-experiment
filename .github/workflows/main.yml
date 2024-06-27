@@ -12,12 +12,15 @@ jobs:
   hickory_changed:
     name: determine if hickory-dns source was modified
     runs-on: ubuntu-latest
+    outputs:
+      outcome: ${{steps.output_step.outputs.outcome}}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - run: |
-          git diff --name-only origin/${{github.base_ref}} HEAD | grep -v '^conformance/' && echo outcome=1 || echo outcome=0
+      - id: output_step
+        run: |
+          git diff --name-only origin/${{github.base_ref}} HEAD | grep -v '^conformance/' && echo "outcome=1" >> "$GITHUB_OUTPUT" || echo "outcome=0" >> "$GITHUB_OUTPUT"
 
   main-test:
     name: unit and integration tests
@@ -28,7 +31,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         # runs conditionally
       - name: cargo test
-        if: ${{needs.hickory_changed.outputs.outcome}} == 1
+        if: needs.hickory_changed.outputs.outcome == '1'
         run: cargo test
 
   # always runs
