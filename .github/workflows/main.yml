@@ -36,6 +36,8 @@ jobs:
       - name: sanity check
         if: needs.hickory_changed.outputs.outcome == '0'
         run: true
+      - name: inspect
+        run: echo ${{needs.hickory_changed.outputs.outcome}}
 
   # always runs
   conformance-test:
