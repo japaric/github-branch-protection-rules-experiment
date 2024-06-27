@@ -13,7 +13,7 @@ jobs:
     name: determine if hickory-dns source was modified
     runs-on: ubuntu-latest
     outputs:
-      outcome: steps.output_step.outputs.outcome
+      outcome: ${{steps.output_step.outputs.outcome}}
     steps:
       - uses: actions/checkout@v4
         with:
