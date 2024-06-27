@@ -12,11 +12,14 @@ jobs:
   hickory_changed:
     name: determine if hickory-dns source was modified
     runs-on: ubuntu-latest
+    outputs:
+      outcome: steps.output_step.outputs.outcome
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - run: |
+      - id: output_step
+        run: |
           git diff --name-only origin/${{github.base_ref}} HEAD | grep -v '^conformance/' && echo "outcome=1" >> "$GITHUB_OUTPUT" || echo "outcome=0" >> "$GITHUB_OUTPUT"
 
   main-test:
