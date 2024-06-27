@@ -4,20 +4,40 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - "conformance/**"
   pull_request:
     branches:
       - main
-    paths-ignore:
-      - "conformance/**"
 
 jobs:
+  hickory_changed:
+    name: determine if hickory-dns source was modified
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: |
+          git diff --name-only origin/${{github.base_ref}} HEAD | grep -v '^conformance/' && echo outcome=1 || echo outcome=0
+
   main-test:
     name: unit and integration tests
+    needs: hickory_changed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        # runs conditionally
+      - name: cargo test
+        if: ${{needs.hickory_changed.outputs.outcome}} == 1
+        run: cargo test
+
+  # always runs
+  conformance-test:
+    name: conformance tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - name: cargo test
+        working-directory: conformance
         run: cargo test
